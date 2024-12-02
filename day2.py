@@ -4,42 +4,49 @@ import sys
 
 def safetyChecker(reports):
 
+    passedFirstCheck = []
     unsafeReports = 0
-    for report in reports:
-        for i in range(len(report) - 1):
-            if(
-                (abs(report[i] - report[i + 1]) >= 1
-                and
-                abs(report[i] - report[i + 1]) <= 3)
-            ):
-                pass
-            else:
-                unsafeReports = unsafeReports + 1
-                reports.remove(report)
-                print(report," was unsafe due to diff")
-                break
 
-    risingCurrent = False
-    risingPast = False
     for report in reports:
+        state = ""
         for i in range(len(report) - 1):
-            if(
-                report[i] > report[i + 1]
-            ):
-                risingCurrent = False
-            else:
-                risingCurrent = True
+
+            if(state == ""):
+                if (report[i] > report[i + 1]):
+                    state = "falling"
+                else:
+                    state = "rising"
+        
             
-            if(i > 0):
-                if(risingPast != risingCurrent):
+            elif (state == "falling"):
+                if(report[i] > report[i + 1]):
+                    passedFirstCheck.append(report)
+                else:
                     unsafeReports = unsafeReports + 1
-                    print(report," was unsafe due to rise/decline")
+                    print(report, " is unsafe")
                     break
-            risingPast = risingCurrent
+            
+            else:
+                if(report[i] < report[i + 1]):
+                    passedFirstCheck.append(report)
+                else:
+                    unsafeReports = unsafeReports + 1
+                    print(report, " is unsafe")
+                    break
     
+    print(passedFirstCheck, " passed first check")
+    passedSecondCheck = []
+    for report in passedFirstCheck:
+        for i in range(len(report) - 1):
+            if (
+                abs(report[i] - report[i + 1]) >= 1
+                and
+                abs(report[i] - report[i + 1]) <= 3
+                ):
+                passedSecondCheck.append(report)
 
-    
-    return unsafeReports
+    print(passedSecondCheck, " passed second check")
+    return passedSecondCheck
 
 reports = []
 for line in sys.stdin:
@@ -51,9 +58,10 @@ for report in reports:
 
 reportsAmnt = len(reports)
 
-unsafeReports = safetyChecker(reports)
+safeReportsAmnt = len(safetyChecker(reports))
 
-safeReports = (reportsAmnt) - unsafeReports
-print(unsafeReports, " unsafe reports")
-print(safeReports, " safe reports")
+unsafeReportsAmnt = reportsAmnt - safeReportsAmnt
+
+print(unsafeReportsAmnt, " unsafe reports")
+print(safeReportsAmnt, " safe reports")
 print(reportsAmnt, " total reports")
