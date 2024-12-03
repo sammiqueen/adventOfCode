@@ -36,9 +36,9 @@ def safetyChecker(reports):
             
             if (i == (len(report) - 2)):
                 passedFirstCheck.append(report)
-            
     
     print(passedFirstCheck, " passed first check")
+
     passedSecondCheck = []
     for report in passedFirstCheck:
         for i in range(len(report) - 1):
