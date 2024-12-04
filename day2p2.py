@@ -57,9 +57,23 @@ def safetyChecker(reports):
             if (i == (len(report) - 2)):
                 passedSecondCheck.append(report)
 
-
     print(passedSecondCheck, " passed second check")
-    return passedSecondCheck
+
+    for report in passedSecondCheck:
+        reports.remove(report)
+
+    passedThirdCheck = []
+    for report in reports:
+        for i in range(len(report)):
+
+            tempReport = report
+            tempReport.pop(i)
+            
+            passedThirdCheck.append(report)
+    
+    print(passedpassedThirdCheck, " passed first check")
+
+    return passedFourthCheck
 
 reports = []
 for line in sys.stdin:
